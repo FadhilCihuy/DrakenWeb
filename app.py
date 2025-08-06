@@ -6,8 +6,8 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-# Ganti dengan OpenRouter API key kamu
-OPENROUTER_API_KEY = "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"
+# Gunakan Environment Variable untuk keamanan
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 @app.route("/chat", methods=["POST"])
 def chat():
@@ -20,7 +20,7 @@ def chat():
     }
 
     body = {
-        "model": "openrouter/openchat",  # atau model lain dari https://openrouter.ai/docs#models
+        "model": "openrouter/openchat",  # kamu juga bisa ganti model lain
         "messages": [
             {"role": "user", "content": prompt}
         ]
@@ -29,7 +29,6 @@ def chat():
     try:
         response = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, json=body)
         result = response.json()
-
         return jsonify({"answer": result["choices"][0]["message"]["content"]})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -39,4 +38,5 @@ def home():
     return jsonify({"message": "OpenRouter Flask API running!"})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # penting untuk Railway
+    app.run(host='0.0.0.0', port=port)
