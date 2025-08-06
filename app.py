@@ -20,7 +20,7 @@ def chat():
     }
 
     body = {
-        "model": "mistralai/mistral-7b-instruct",  # Model aman dan sering berhasil
+        "model": "openchat/openchat-3.5",  # Model aman dan sering berhasil
         "messages": [
             {"role": "user", "content": prompt}
         ]
@@ -45,3 +45,4 @@ def home():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))  # untuk Railway
     app.run(host="0.0.0.0", port=port)
+
